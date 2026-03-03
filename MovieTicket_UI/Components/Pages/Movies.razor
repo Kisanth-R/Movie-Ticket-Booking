@@ -1,0 +1,145 @@
+@page "/admin"
+@using MovieTicket.UI.Models
+@using MovieTicket.UI.Services
+@inject MovieApiService MovieService
+
+<div class="admin-page">
+
+    <!-- HEADER -->
+    <div class="admin-header">
+        <h2>🎬 Admin – Movie Management</h2>
+        <p>Add, view and delete movies</p>
+    </div>
+
+    <!-- ADD MOVIE CARD -->
+    <div class="admin-card">
+        <h3>Add New Movie</h3>
+
+        <div class="form-grid">
+            <input placeholder="Title" @bind="movie.Title" />
+            <input placeholder="Genre" @bind="movie.Genre" />
+            <input placeholder="Duration (hrs)" type="number" @bind="movie.Duration" />
+            <input placeholder="Price" type="number" @bind="movie.Price" />
+            <input placeholder="Rating" type="number" step="0.1" @bind="movie.Rating" />
+        </div>
+
+        <button class="add-btn" @onclick="AddMovie">
+            ➕ Add Movie
+        </button>
+    </div>
+
+    <!-- MOVIE TABLE -->
+    <div class="admin-card">
+        <h3>Movies List</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Genre</th>
+                    <th>Duration</th>
+                    <th>Price</th>
+                    <th>Rating</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in PagedMovies)
+                {
+                    <tr>
+                        <td>@m.Title</td>
+                        <td>@m.Genre</td>
+                        <td>@m.Duration hrs</td>
+                        <td>₹@m.Price</td>
+                        <td>@m.Rating ⭐</td>
+                        <td>
+                            <button class="delete-btn"
+                                    @onclick="() => Delete(m.Id)">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- PAGINATION -->
+        @if (TotalPages > 1)
+        {
+            <div class="pagination">
+                <button disabled="@(currentPage == 1)"
+                        @onclick="PreviousPage">
+                    Prev
+                </button>
+
+                @for (int i = 1; i <= TotalPages; i++)
+                {
+                    <button class="@(i == currentPage ? "active" : "")"
+                            @onclick="() => GoToPage(i)">
+                        @i
+                    </button>
+                }
+
+                <button disabled="@(currentPage == TotalPages)"
+                        @onclick="NextPage">
+                    Next
+                </button>
+            </div>
+        }
+    </div>
+
+</div>
+
+@code {
+
+    List<Movie> movies = new();
+    Movie movie = new();
+
+    /* PAGINATION */
+    int currentPage = 1;
+    int pageSize = 5;
+
+    int TotalPages =>
+        (int)Math.Ceiling((double)movies.Count / pageSize);
+
+    IEnumerable<Movie> PagedMovies =>
+        movies.Skip((currentPage - 1) * pageSize)
+              .Take(pageSize);
+
+    protected override async Task OnInitializedAsync()
+    {
+        movies = await MovieService.GetMovies();
+    }
+
+    async Task AddMovie()
+    {
+        await MovieService.AddMovie(movie);
+        movie = new Movie();
+        movies = await MovieService.GetMovies();
+        currentPage = 1;
+    }
+
+    async Task Delete(int id)
+    {
+        await MovieService.DeleteMovie(id);
+        movies = await MovieService.GetMovies();
+        currentPage = 1;
+    }
+
+    void NextPage()
+    {
+        if (currentPage < TotalPages)
+            currentPage++;
+    }
+
+    void PreviousPage()
+    {
+        if (currentPage > 1)
+            currentPage--;
+    }
+
+    void GoToPage(int page)
+    {
+        currentPage = page;
+    }
+}

@@ -1,0 +1,237 @@
+@page "/bookings"
+@using MovieTicket.UI.Models
+@using MovieTicket.UI.Services
+@inject MovieApiService MovieService
+@inject BookingApiService BookingService
+
+<div class="bookings-page">
+
+@if (!isLoggedIn)
+{
+    <div class="login-wrapper">
+        <div class="login-card">
+            <h2>🎬 Movie Ticket Booking</h2>
+
+            <input placeholder="Username"
+                   @bind="userName" />
+
+            <input placeholder="Password"
+                   type="password"
+                   @bind="password" />
+
+            <button @onclick="Login">Login</button>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <p class="error">@errorMessage</p>
+            }
+        </div>
+    </div>
+}
+else
+{
+    
+    <div class="top-bar">
+        <h2>Welcome, @userName</h2>
+        <button class="logout-btn" @onclick="Logout">Logout</button>
+    </div>
+
+    <!-- NOW SHOWING -->
+    <h2 class="section-title">🎬 Now Showing</h2>
+
+    <div class="movie-grid">
+        @foreach (var movie in movies)
+        {
+            <div class="movie-card @movie.Genre?.ToLower()">
+                <div class="movie-header">
+                    <h3>@movie.Title</h3>
+                    <span class="genre">@movie.Genre</span>
+                </div>
+
+                <div class="movie-info">
+                    <span>⏱ @movie.Duration hrs</span>
+                    <span class="rating">⭐ @movie.Rating</span>
+                </div>
+
+                <div class="movie-footer">
+                    <span class="price">₹@movie.Price</span>
+                    <button @onclick="() => SelectMovie(movie.Id)">
+                        Book
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- BOOK PANEL -->
+    @if (selectedMovieId != 0)
+    {
+        <div class="book-panel">
+            <h3>🎟 Book Tickets</h3>
+            <input type="number"
+                   placeholder="Number of tickets"
+                   @bind="booking.Tickets" />
+            <button @onclick="BookTicket">Confirm Booking</button>
+        </div>
+    }
+
+    <!-- MY BOOKINGS -->
+    <h2 class="section-title">🎫 My Tickets</h2>
+
+    <div class="tickets-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Movie</th>
+                    <th>Tickets</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in PagedBookings)
+                {
+                    <tr>
+                        <td>@b.MovieTitle</td>
+                        <td>@b.Tickets</td>
+                        <td>@b.Status</td>
+                        <td>
+                            @if (b.Status == "Booked")
+                            {
+                                <button class="cancel-btn"
+                                        @onclick="() => Cancel(b.Id)">
+                                    Cancel
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (TotalPages > 1)
+        {
+            <div class="pagination">
+                <button disabled="@(currentPage == 1)"
+                        @onclick="PreviousPage">‹</button>
+
+                @for (int i = 1; i <= TotalPages; i++)
+                {
+                    <button class="@(i == currentPage ? "active" : "")"
+                            @onclick="() => GoToPage(i)">
+                        @i
+                    </button>
+                }
+
+                <button disabled="@(currentPage == TotalPages)"
+                        @onclick="NextPage">›</button>
+            </div>
+        }
+    </div>
+}
+</div>
+
+@code {
+
+string userName = "";
+string password = "";
+bool isLoggedIn = false;
+string errorMessage = "";
+
+List<Movie> movies = new();
+List<Booking> bookings = new();
+
+Booking booking = new();
+int selectedMovieId = 0;
+
+
+int currentPage = 1;
+int pageSize = 5;
+
+int TotalPages =>
+    (int)Math.Ceiling((double)bookings.Count / pageSize);
+
+IEnumerable<Booking> PagedBookings =>
+    bookings.Skip((currentPage - 1) * pageSize).Take(pageSize);
+
+
+async Task Login()
+{
+    if (string.IsNullOrWhiteSpace(userName))
+    {
+        errorMessage = "Username required";
+        return;
+    }
+
+    isLoggedIn = true;
+    movies = await MovieService.GetMovies();
+    await LoadMyBookings();
+}
+
+void Logout()
+{
+    userName = "";
+    password = "";
+    isLoggedIn = false;
+    movies.Clear();
+    bookings.Clear();
+    booking = new Booking();
+    selectedMovieId = 0;
+}
+
+
+async Task LoadMyBookings()
+{
+    bookings = await BookingService.GetBookings(userName);
+
+    foreach (var b in bookings)
+    {
+        b.MovieTitle =
+            movies.FirstOrDefault(m => m.Id == b.MovieId)?.Title ?? "";
+    }
+
+    currentPage = 1;
+}
+
+void SelectMovie(int id)
+{
+    selectedMovieId = id;
+}
+
+async Task BookTicket()
+{
+    booking.MovieId = selectedMovieId;
+    booking.CustomerName = userName;
+
+    await BookingService.CreateBooking(booking);
+
+    booking = new Booking();
+    selectedMovieId = 0;
+
+    await LoadMyBookings();
+}
+
+async Task Cancel(int id)
+{
+    await BookingService.CancelBooking(id);
+    await LoadMyBookings();
+}
+
+
+void NextPage()
+{
+    if (currentPage < TotalPages)
+        currentPage++;
+}
+
+void PreviousPage()
+{
+    if (currentPage > 1)
+        currentPage--;
+}
+
+void GoToPage(int page)
+{
+    currentPage = page;
+}
+}

@@ -1,0 +1,349 @@
+/* PAGE */
+.bookings-page {
+    background: linear-gradient(135deg, #020617, #0f172a);
+    min-height: 100vh;
+    padding: 30px;
+    color: #e5e7eb;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* LOGIN */
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.login-card {
+    background: #020617;
+    padding: 32px;
+    border-radius: 16px;
+    width: 340px;
+    text-align: center;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    border-radius: 8px;
+    border: none;
+}
+
+.login-card button {
+    margin-top: 16px;
+    width: 100%;
+}
+
+.error {
+    color: #f87171;
+}
+
+/* HEADER */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* SECTION TITLE */
+.section-title {
+    margin: 30px 0 16px;
+}
+
+/* MOVIE GRID */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+/* MOVIE CARD */
+.movie-card {
+    padding: 18px;
+    border-radius: 18px;
+    transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-8px);
+}
+
+/* GENRE COLORS */
+.movie-card.action { background: linear-gradient(135deg, #dc2626, #7f1d1d); }
+.movie-card.love,
+.movie-card.romance { background: linear-gradient(135deg, #ec4899, #9d174d); }
+.movie-card.comedy { background: linear-gradient(135deg, #f59e0b, #92400e); }
+.movie-card.thriller { background: linear-gradient(135deg, #6366f1, #312e81); }
+
+/* CARD CONTENT */
+.movie-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.genre {
+    background: rgba(255,255,255,0.25);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+.movie-info {
+    display: flex;
+    justify-content: space-between;
+    margin: 14px 0;
+}
+
+.movie-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* BUTTONS */
+button {
+    background: rgba(0,0,0,0.35);
+    border: none;
+    padding: 6px 16px;
+    border-radius: 999px;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: rgba(0,0,0,0.6);
+}
+
+.logout-btn {
+    background: #dc2626;
+}
+
+/* BOOK PANEL */
+.book-panel {
+    background: #020617;
+    padding: 20px;
+    border-radius: 16px;
+    margin-top: 30px;
+}
+
+/* TICKETS */
+.tickets-card {
+    background: #020617;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+}
+
+th {
+    background: #1f2937;
+}
+
+/* PAGINATION */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.pagination button {
+    min-width: 36px;
+}
+
+.pagination button.active {
+    background: #2563eb;
+}
+
+.cancel-btn {
+    background: #dc2626;
+}
+/* LANDING PAGE */
+.landing-page {
+    min-height: 100vh;
+    background: linear-gradient(
+        135deg,
+        #020617,
+        #0f172a,
+        #1e293b
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Segoe UI", sans-serif;
+    color: #f9fafb;
+}
+
+/* HERO CARD */
+.hero-card {
+    background: rgba(2, 6, 23, 0.85);
+    padding: 50px;
+    border-radius: 22px;
+    text-align: center;
+    width: 420px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+}
+
+/* TITLE */
+.hero-title {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.hero-subtitle {
+    font-size: 15px;
+    color: #9ca3af;
+    margin-bottom: 30px;
+}
+
+/* BUTTON GROUP */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* COMMON BUTTON */
+.action-buttons button {
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+/* USER BUTTON */
+.user-btn {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+}
+
+.user-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(37,99,235,0.5);
+}
+
+/* ADMIN BUTTON */
+.admin-btn {
+    background: linear-gradient(135deg, #dc2626, #7f1d1d);
+    color: white;
+}
+
+.admin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(220,38,38,0.5);
+}
+.admin-page {
+    background: #0f172a;
+    min-height: 100vh;
+    padding: 30px;
+    color: #e5e7eb;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* HEADER */
+.admin-header {
+    margin-bottom: 20px;
+}
+
+.admin-header h2 {
+    margin-bottom: 4px;
+}
+
+/* CARD */
+.admin-card {
+    background: #020617;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+/* FORM */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+/* BUTTONS */
+button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.add-btn {
+    background: #22c55e;
+    color: #022c22;
+}
+
+.delete-btn {
+    background: #dc2626;
+    color: white;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #1f2937;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #374151;
+}
+
+/* PAGINATION */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.pagination button {
+    background: #1f2937;
+    color: #e5e7eb;
+    min-width: 36px;
+}
+
+.pagination button.active {
+    background: #2563eb;
+}
+
+.pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

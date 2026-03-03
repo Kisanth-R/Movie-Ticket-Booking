@@ -1,0 +1,37 @@
+@page "/"
+@inject NavigationManager nav
+
+<div class="landing-page">
+
+    <div class="hero-card">
+        <h1 class="hero-title">🎬 Movie Ticket Booking</h1>
+        <p class="hero-subtitle">
+            Book your favourite movies instantly
+        </p>
+
+        <div class="action-buttons">
+            <button class="user-btn"
+                    @onclick="GoUser">
+                🎟 Login as User
+            </button>
+
+            <button class="admin-btn"
+                    @onclick="GoAdmin">
+                ⚙️ Login as Admin
+            </button>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    void GoUser()
+    {
+        nav.NavigateTo("/bookings");
+    }
+
+    void GoAdmin()
+    {
+        nav.NavigateTo("/admin");
+    }
+}
